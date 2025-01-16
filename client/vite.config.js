@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://student-teacher-appoint-git-main-piyushs-projects-c005e3cc.vercel.app', // Backend server URL
+        target: 'https://vercel.com/piyushs-projects-c005e3cc/student-teacher/8z4QEk3cq43YGFXYeom3P99qMgDw', // Backend server URL
         changeOrigin: true,
         secure: false,
       },
