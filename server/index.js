@@ -29,7 +29,7 @@ connectToMongo()
 
 // Test route
 app.get('/', (req, res) => {
-  res.status(200).send('Welcome to the Tutor-Time API!');
+  res.status(200).send('Welcome to the Tutor!');
 });
 
 // Mount routes
