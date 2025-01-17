@@ -1,45 +1,44 @@
 const express = require('express');
-// cors
 const cors = require('cors');
 const dotenv = require('dotenv');
-const app = express();
-// mouting routes
+const connectToMongo = require('./db'); // Importing the MongoDB connection function
+
+// Importing routes
 const adminRoutes = require('./routes/adminRoutes');
 const teacherRoutes = require('./routes/teacherRoutes');
 const studentRoutes = require('./routes/studentRoutes');
 const messageRoutes = require('./routes/messageRoutes');
 
-
+// Load environment variables
 dotenv.config({ path: './.env' });
 
-// middleware
-app.use(express.json());
-// app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+const app = express();
+const port = process.env.PORT || 5000;
 
+// Middleware
+app.use(express.json()); // Parse incoming JSON requests
+app.use(cors()); // Enable CORS for all origins
 
 // Connect to MongoDB
-const connectToMongo = require('./db');
-connectToMongo();
+connectToMongo()
+  .then(() => console.log('Connected to MongoDB successfully'))
+  .catch((err) => {
+    console.error('Failed to connect to MongoDB:', err.message);
+    process.exit(1); // Exit if MongoDB connection fails
+  });
 
+// Test route
 app.get('/', (req, res) => {
-  res.send('Welcome to the Tutor-Time API!');
+  res.status(200).send('Welcome to the Tutor-Time API!');
 });
 
-// mouting routes
+// Mount routes
 app.use('/api/v1/admin', adminRoutes);
 app.use('/api/v1/teachers', teacherRoutes);
 app.use('/api/v1/student', studentRoutes);
 app.use('/api/v1/messages', messageRoutes);
 
-// global catch
-// app.use((err, req, res, next) => {
-//   console.error(err.stack);
-//   res.status(500).send("Something broke!");
-// });
-
-const port = process.env.PORT || 5000;
-
+// Start server
 app.listen(port, () => {
-  console.log('App listening on port ' + port);
+  console.log(`App is listening on port ${port}`);
 });
