@@ -1,4 +1,7 @@
 const express = require('express');
+// cors
+const cors = require('cors');
+const dotenv = require('dotenv');
 const app = express();
 // mouting routes
 const adminRoutes = require('./routes/adminRoutes');
@@ -6,9 +9,6 @@ const teacherRoutes = require('./routes/teacherRoutes');
 const studentRoutes = require('./routes/studentRoutes');
 const messageRoutes = require('./routes/messageRoutes');
 
-// cors
-const cors = require('cors');
-const dotenv = require('dotenv');
 
 dotenv.config({ path: './.env' });
 
@@ -16,6 +16,7 @@ dotenv.config({ path: './.env' });
 app.use(express.json());
 // app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+
 
 // Connect to MongoDB
 const connectToMongo = require('./db');
