@@ -1,44 +1,38 @@
 const express = require('express');
-const cors = require('cors');
-const dotenv = require('dotenv');
-const connectToMongo = require('./db'); // Importing the MongoDB connection function
-
-// Importing routes
+const app = express();
+// mouting routes
 const adminRoutes = require('./routes/adminRoutes');
 const teacherRoutes = require('./routes/teacherRoutes');
 const studentRoutes = require('./routes/studentRoutes');
 const messageRoutes = require('./routes/messageRoutes');
 
-// Load environment variables
+// cors
+const cors = require('cors');
+const dotenv = require('dotenv');
+
 dotenv.config({ path: './.env' });
 
-const app = express();
-const port = process.env.PORT || 5000;
-
-// Middleware
-app.use(express.json()); // Parse incoming JSON requests
-app.use(cors()); // Enable CORS for all origins
+// middleware
+app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 
 // Connect to MongoDB
-connectToMongo()
-  .then(() => console.log('Connected to MongoDB successfully'))
-  .catch((err) => {
-    console.error('Failed to connect to MongoDB:', err.message);
-    process.exit(1); // Exit if MongoDB connection fails
-  });
+const connectToMongo = require('./db');
+connectToMongo();
 
-// Test route
 app.get('/', (req, res) => {
-  res.status(200).send('Welcome to the Tutor!');
+  res.send('Welcome to the Tutor!');
 });
 
-// Mount routes
+// mouting routes
 app.use('/api/v1/admin', adminRoutes);
 app.use('/api/v1/teachers', teacherRoutes);
 app.use('/api/v1/student', studentRoutes);
 app.use('/api/v1/messages', messageRoutes);
 
-// Start server
+const port = process.env.PORT || 5000;
+
 app.listen(port, () => {
-  console.log(`App is listening on port ${port}`);
+  console.log('App listening on port ' + port);
 });
